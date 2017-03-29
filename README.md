@@ -1,2 +1,2 @@
 # oak
-a system by using block chain tech to enhance data safety
+a system that using block chain tech to enhance data safety

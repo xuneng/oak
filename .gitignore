@@ -1,0 +1,17 @@
+*.iws
+out
+.idea
+*.iml
+*.ipr
+*.ids
+.classpath
+.gitignore.swp
+.project
+.settings/
+*.log
+*.log.*
+build/
+bin/
+.metadata
+ibatisOutput/
+target/

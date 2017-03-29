@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="OakTableMetaInfo">
+	<resultMap id="oakTableMetaInfoMap" type="oakTableMetaInfo">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+		<result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+		<result column="db_schema" property="dbSchema" jdbcType="VARCHAR" />
+		<result column="table_name" property="tableName" jdbcType="VARCHAR" />
+		<result column="db_host" property="dbHost" jdbcType="VARCHAR" />
+		<result column="db_port" property="dbPort" jdbcType="VARCHAR" />
+		<result column="db_user" property="dbUser" jdbcType="VARCHAR" />
+		<result column="db_pwd" property="dbPwd" jdbcType="VARCHAR" />
+		<result column="db_type" property="dbType" jdbcType="VARCHAR" />
+		<result column="db_colums" property="dbColums" jdbcType="VARCHAR" />
+	</resultMap>
+	<insert id="insert" parameterType="oakTableMetaInfo">
+		<selectKey resultType="long" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into
+		oak_table_meta_info (id, create_time, create_by,
+		modify_time,
+		modify_by, db_schema,
+		table_name, db_host, db_port,
+		db_user, db_pwd,
+		db_type,
+		db_colums)
+		values (#{id,jdbcType=BIGINT},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{createBy,jdbcType=VARCHAR},
+		#{modifyTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR},
+		#{dbSchema,jdbcType=VARCHAR},
+		#{tableName,jdbcType=VARCHAR},
+		#{dbHost,jdbcType=VARCHAR},
+		#{dbPort,jdbcType=VARCHAR},
+		#{dbUser,jdbcType=VARCHAR}, #{dbPwd,jdbcType=VARCHAR},
+		#{dbType,jdbcType=VARCHAR},
+		#{dbColums,jdbcType=VARCHAR})
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="oakTableMetaInfo">
+		update oak_table_meta_info
+		<set>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				create_by = #{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="modifyTime != null">
+				modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyBy != null">
+				modify_by = #{modifyBy,jdbcType=VARCHAR},
+			</if>
+			<if test="dbSchema != null">
+				db_schema = #{dbSchema,jdbcType=VARCHAR},
+			</if>
+			<if test="tableName != null">
+				table_name = #{tableName,jdbcType=VARCHAR},
+			</if>
+			<if test="dbHost != null">
+				db_host = #{dbHost,jdbcType=VARCHAR},
+			</if>
+			<if test="dbPort != null">
+				db_port = #{dbPort,jdbcType=VARCHAR},
+			</if>
+			<if test="dbUser != null">
+				db_user = #{dbUser,jdbcType=VARCHAR},
+			</if>
+			<if test="dbPwd != null">
+				db_pwd = #{dbPwd,jdbcType=VARCHAR},
+			</if>
+			<if test="dbType != null">
+				db_type = #{dbType,jdbcType=VARCHAR},
+			</if>
+			<if test="dbColums != null">
+				db_colums = #{dbColums,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="oakTableMetaInfoMap"
+		parameterType="java.lang.Long">
+		select id, create_time, create_by, modify_time,
+		modify_by, db_schema,
+		table_name,
+		db_host, db_port, db_user, db_pwd,
+		db_type, db_colums
+		from oak_table_meta_info
+		where id =
+		#{id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="selectByParam" resultMap="oakTableMetaInfoMap"
+		parameterType="oakTableMetaInfo">
+		select id, create_time, create_by, modify_time, modify_by, db_schema,
+		table_name,
+		db_host, db_port, db_user, db_pwd, db_type, db_colums
+		from
+		oak_table_meta_info
+		where
+		<if test="id != null">
+			id = #{id,jdbcType=BIGINT} and
+		</if>
+		<if test="createTime != null">
+			create_time = #{createTime,jdbcType=TIMESTAMP} and
+		</if>
+		<if test="createBy != null">
+			create_by = #{createBy,jdbcType=VARCHAR} and
+		</if>
+		<if test="modifyTime != null">
+			modify_time = #{modifyTime,jdbcType=TIMESTAMP} and
+		</if>
+		<if test="modifyBy != null">
+			modify_by = #{modifyBy,jdbcType=VARCHAR} and
+		</if>
+		<if test="dbSchema != null">
+			db_schema = #{dbSchema,jdbcType=VARCHAR} and
+		</if>
+		<if test="tableName != null">
+			table_name = #{tableName,jdbcType=VARCHAR} and
+		</if>
+		<if test="dbHost != null">
+			db_host = #{dbHost,jdbcType=VARCHAR} and
+		</if>
+		<if test="dbPort != null">
+			db_port = #{dbPort,jdbcType=VARCHAR} and
+		</if>
+		<if test="dbUser != null">
+			db_user = #{dbUser,jdbcType=VARCHAR} and
+		</if>
+		<if test="dbPwd != null">
+			db_pwd = #{dbPwd,jdbcType=VARCHAR} and
+		</if>
+		<if test="dbType != null">
+			db_type = #{dbType,jdbcType=VARCHAR} and
+		</if>
+		<if test="dbColums != null">
+			db_colums = #{dbColums,jdbcType=VARCHAR} and
+		</if>
+		1=1 order by id desc
+	</select>
+	<insert id="batchInsert" useGeneratedKeys="true" parameterType="java.util.List">
+		<selectKey resultType="long" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into
+		oak_table_meta_info (id, create_time, create_by,
+		modify_time,
+		modify_by, db_schema,
+		table_name, db_host, db_port,
+		db_user, db_pwd,
+		db_type,
+		db_colums)
+		values
+		<foreach collection="list" item="item" index="index"
+			separator=","> (#{item.id,jdbcType=BIGINT},
+			#{item.createTime,jdbcType=TIMESTAMP},
+			#{item.createBy,jdbcType=VARCHAR},
+			#{item.modifyTime,jdbcType=TIMESTAMP},
+			#{item.modifyBy,jdbcType=VARCHAR},
+			#{item.dbSchema,jdbcType=VARCHAR},
+			#{item.tableName,jdbcType=VARCHAR},
+			#{item.dbHost,jdbcType=VARCHAR},
+			#{item.dbPort,jdbcType=VARCHAR},
+			#{item.dbUser,jdbcType=VARCHAR},
+			#{item.dbPwd,jdbcType=VARCHAR},
+			#{item.dbType,jdbcType=VARCHAR},
+			#{item.dbColums,jdbcType=VARCHAR})
+		</foreach>
+	</insert>
+	<select id="selectAllOrderByBD" resultMap="oakTableMetaInfoMap">
+		select * from oak_table_meta_info order by db_host,db_port,db_schema,table_name
+	</select>
+	
+</mapper>

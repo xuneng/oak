@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="OakBlockChain">
+	<resultMap id="oakBlockChainMap" type="oakBlockChain">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+		<result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+		<result column="target_hash" property="targetHash" jdbcType="VARCHAR" />
+		<result column="hash_value" property="hashValue" jdbcType="VARCHAR" />
+		<result column="fk_uid" property="fkUid" jdbcType="VARCHAR" />
+		<result column="meta_id" property="metaId" jdbcType="BIGINT" />
+	</resultMap>
+	<insert id="insert" parameterType="oakBlockChain">
+		<selectKey resultType="long" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into oak_block_chain
+		(id, create_time, create_by,
+		modify_time,
+		modify_by, target_hash,
+		hash_value, fk_uid, meta_id
+		)
+		values
+		(#{id,jdbcType=BIGINT},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{createBy,jdbcType=VARCHAR},
+		#{modifyTime,jdbcType=TIMESTAMP},
+		#{modifyBy,jdbcType=VARCHAR},
+		#{targetHash,jdbcType=VARCHAR},
+		#{hashValue,jdbcType=VARCHAR},
+		#{fkUid,jdbcType=VARCHAR},
+		#{metaId,jdbcType=BIGINT}
+		)
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="oakBlockChain">
+		update oak_block_chain
+		<set>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				create_by = #{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="modifyTime != null">
+				modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyBy != null">
+				modify_by = #{modifyBy,jdbcType=VARCHAR},
+			</if>
+			<if test="targetHash != null">
+				target_hash = #{targetHash,jdbcType=VARCHAR},
+			</if>
+			<if test="hashValue != null">
+				hash_value = #{hashValue,jdbcType=VARCHAR},
+			</if>
+			<if test="fkUid != null">
+				fk_uid = #{fkUid,jdbcType=VARCHAR},
+			</if>
+			<if test="metaId != null">
+				meta_id = #{metaId,jdbcType=BIGINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		oak_block_chain
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<select id="selectByPrimaryKey" resultMap="oakBlockChainMap"
+		parameterType="java.lang.Long">
+		select id, create_time, create_by, modify_time,
+		modify_by, target_hash,
+		hash_value,
+		fk_uid, meta_id
+		from oak_block_chain
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="selectByParam" resultMap="oakBlockChainMap"
+		parameterType="oakBlockChain">
+		select id, create_time, create_by, modify_time, modify_by,
+		target_hash, hash_value,
+		fk_uid, meta_id
+		from oak_block_chain
+		where
+		<if test="id != null">
+			id = #{id,jdbcType=BIGINT} and
+		</if>
+		<if test="createTime != null">
+			create_time = #{createTime,jdbcType=TIMESTAMP} and
+		</if>
+		<if test="createBy != null">
+			create_by = #{createBy,jdbcType=VARCHAR} and
+		</if>
+		<if test="modifyTime != null">
+			modify_time = #{modifyTime,jdbcType=TIMESTAMP} and
+		</if>
+		<if test="modifyBy != null">
+			modify_by = #{modifyBy,jdbcType=VARCHAR} and
+		</if>
+		<if test="targetHash != null">
+			target_hash = #{targetHash,jdbcType=VARCHAR} and
+		</if>
+		<if test="hashValue != null">
+			hash_value = #{hashValue,jdbcType=VARCHAR} and
+		</if>
+		<if test="fkUid != null">
+			fk_uid = #{fkUid,jdbcType=VARCHAR} and
+		</if>
+		<if test="metaId != null">
+			meta_id = #{metaId,jdbcType=BIGINT} and
+		</if>
+		1=1
+	</select>
+	<insert id="batchInsert" useGeneratedKeys="true" parameterType="java.util.List">
+		<selectKey resultType="long" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into oak_block_chain (id, create_time, create_by,
+		modify_time,
+		modify_by, target_hash,
+		hash_value, fk_uid, meta_id
+		)values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item.id,jdbcType=BIGINT},
+			#{item.createTime,jdbcType=TIMESTAMP},
+			#{item.createBy,jdbcType=VARCHAR},
+			#{item.modifyTime,jdbcType=TIMESTAMP},
+			#{item.modifyBy,jdbcType=VARCHAR},
+			#{item.targetHash,jdbcType=VARCHAR},
+			#{item.hashValue,jdbcType=VARCHAR}, #{item.fkUid,jdbcType=VARCHAR},
+			#{item.metaId,jdbcType=BIGINT}
+			)
+		</foreach>
+	</insert>
+	<select id="selectLatestRecord" resultMap="oakBlockChainMap"
+		parameterType="String">
+		select id, create_time, create_by, modify_time,
+		modify_by, target_hash,
+		hash_value,
+		fk_uid, meta_id
+		from oak_block_chain
+		order by id desc limit 1;
+	</select>
+
+</mapper>

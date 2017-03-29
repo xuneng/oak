@@ -1,0 +1,49 @@
+CREATE TABLE oak_task(
+id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '自增id',
+create_time DATETIME NOT NULL COMMENT '创建时间',
+create_by VARCHAR(20) NOT NULL DEFAULT 'SYS' COMMENT '创建者',
+modify_time DATETIME NOT NULL COMMENT '更新时间',
+modify_by VARCHAR(20) NOT NULL DEFAULT 'SYS' COMMENT '更新者',
+STATUS VARCHAR(10) NOT NULL COMMENT '任务状态INIT,PROCESS,SUCCESS,FAIL',
+meta_id BIGINT NOT NULL COMMENT 'FK',
+db_schema VARCHAR(50) NOT NULL COMMENT '冗余字段，目标数据库名',
+start_time DATETIME NOT NULL COMMENT '拉取记录的开始时间点',
+end_time DATETIME NOT NULL COMMENT '拉取记录的结束时间点',
+total INT(11) NOT NULL DEFAULT '0' COMMENT '本次任务总共处理记录数',
+msg VARCHAR(256) COMMENT '信息列，可用于记录运行时信息（正常/异常信息）',
+current INT NOT NULL DEFAULT '0' COMMENT '断点续传偏移位置',
+UNIQUE KEY(meta_id,start_time,end_time)
+)ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE oak_table_meta_info(
+id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '自增id',
+create_time DATETIME NOT NULL COMMENT '创建时间',
+create_by VARCHAR(20) NOT NULL DEFAULT 'SYS' COMMENT '创建者',
+modify_time DATETIME NOT NULL COMMENT '更新时间',
+modify_by VARCHAR(20) NOT NULL DEFAULT 'SYS' COMMENT '更新者',
+db_schema VARCHAR(50) NOT NULL COMMENT '目标数据库名称',
+table_name VARCHAR(50) NOT NULL COMMENT '目标表名',
+db_host VARCHAR(128) NOT NULL COMMENT '数据库地址',
+db_port VARCHAR(10) NOT NULL COMMENT '数据库端口',
+db_user VARCHAR(128) NOT NULL COMMENT '数据库用户名',
+db_pwd VARCHAR(128) NOT NULL COMMENT '数据库密码',
+db_type VARCHAR(20) NOT NULL DEFAULT 'MYSQL' COMMENT '目前只支持值 MYSQL',
+db_colums VARCHAR(256) NOT NULL COMMENT '用,分割，目标表内选取的列名',
+UNIQUE KEY(db_schema,table_name,db_host,db_port)
+)ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+
+
+CREATE TABLE oak_block_chain(
+id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '自增id',
+create_time DATETIME NOT NULL COMMENT '创建时间',
+create_by VARCHAR(20) NOT NULL DEFAULT 'SYS' COMMENT '创建者',
+modify_time DATETIME NOT NULL COMMENT '更新时间',
+modify_by VARCHAR(20) NOT NULL DEFAULT 'SYS' COMMENT '更新者',
+target_hash VARCHAR(50) NOT NULL COMMENT '目标数据的hash值',
+hash_value VARCHAR(50) NOT NULL COMMENT '区块链hash值',
+fk_uid VARCHAR(64) NOT NULL COMMENT '目标数据的UID，通常为目标表pk id',
+meta_id BIGINT NOT NULL COMMENT '目标表的源数据记录id',
+UNIQUE KEY(fk_uid,meta_id)
+)ENGINE=INNODB DEFAULT CHARSET=utf8;
